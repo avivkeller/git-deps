@@ -1,0 +1,44 @@
+{
+  "name": "git-deps",
+  "version": "1.0.0",
+  "description": "CLI tool for managing Git-based dependencies",
+  "keywords": [
+    "git",
+    "dependencies",
+    "cli",
+    "npm"
+  ],
+  "homepage": "https://github.com/avivkeller/git-deps#readme",
+  "bugs": {
+    "url": "https://github.com/avivkeller/git-deps/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avivkeller/git-deps.git"
+  },
+  "license": "MIT",
+  "author": "Aviv Keller <me@aviv.sh>",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "bin": {
+    "git-deps": "bin/git-deps.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "format:write": "prettier --write ."
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "commander": "^14.0.0",
+    "fs-extra": "^11.3.0",
+    "ora-classic": "^5.4.2",
+    "semver": "^7.7.2",
+    "simple-git": "^3.27.0",
+    "tmp": "^0.2.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mock-fs": "^5.5.0",
+    "prettier": "^3.5.3"
+  }
+}
