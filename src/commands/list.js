@@ -3,7 +3,7 @@ const path = require("path");
 const { getGitDependencies } = require("../utils/package-manager");
 const { parseGitUrl } = require("../utils/git");
 const { createLogger } = require("../utils/logger");
-const chalk = require("chalk");
+const util = require("util");
 
 const logger = createLogger("list");
 
@@ -21,15 +21,16 @@ async function list(options = {}) {
     }
 
     logger.stopSpinner();
-    console.log(chalk.bold("\nGit Dependencies:"));
-    console.log(chalk.bold("----------------"));
+    console.log(util.styleText("bold", "\nGit Dependencies:"));
+    console.log(util.styleText("bold", "----------------"));
 
+    // Process each dependency
     for (const [name, gitUrl] of Object.entries(gitDependencies)) {
       const { url, ref, path: subPath } = parseGitUrl(gitUrl);
 
-      console.log(chalk.green(`${name}:`));
-      console.log(`  Repository: ${chalk.blue(url)}`);
-      console.log(`  Reference: ${chalk.yellow(ref)}`);
+      console.log(util.styleText("green", `${name}:`));
+      console.log(`  Repository: ${util.styleText("blue", url)}`);
+      console.log(`  Reference: ${util.styleText("yellow", ref)}`);
       console.log(`  Path: ${subPath}`);
 
       // Show additional details if requested
@@ -52,40 +53,32 @@ async function showDependencyDetails(name) {
   try {
     // Determine package directory
     const nodeModulesDir = path.join(process.cwd(), "node_modules");
-    let packageDir;
-
-    if (name.startsWith("@")) {
-      // Scoped package
-      const [scope, pkgName] = name.split("/");
-      packageDir = path.join(nodeModulesDir, scope, pkgName);
-    } else {
-      // Regular package
-      packageDir = path.join(nodeModulesDir, name);
-    }
+    const packageDir = name.startsWith("@")
+      ? path.join(nodeModulesDir, ...name.split("/"))
+      : path.join(nodeModulesDir, name);
 
     const packageJsonPath = path.join(packageDir, "package.json");
 
+    // Check if package is installed
     if (!(await fs.pathExists(packageDir))) {
-      console.log(`  Status: ${chalk.red("Not installed")}`);
+      console.log(`  Status: ${util.styleText("red", "Not installed")}`);
       return;
     }
 
-    console.log(`  Status: ${chalk.green("Installed")}`);
+    console.log(`  Status: ${util.styleText("green", "Installed")}`);
 
+    // Display package information if available
     if (await fs.pathExists(packageJsonPath)) {
       const packageJson = await fs.readJson(packageJsonPath);
 
-      if (packageJson.version) {
-        console.log(`  Version: ${packageJson.version}`);
-      }
-
-      if (packageJson.description) {
+      packageJson.version && console.log(`  Version: ${packageJson.version}`);
+      packageJson.description &&
         console.log(`  Description: ${packageJson.description}`);
-      }
 
       if (packageJson.dependencies) {
-        const depCount = Object.keys(packageJson.dependencies).length;
-        console.log(`  Dependencies: ${depCount}`);
+        console.log(
+          `  Dependencies: ${Object.keys(packageJson.dependencies).length}`,
+        );
       }
     }
   } catch (error) {

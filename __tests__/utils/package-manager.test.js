@@ -85,7 +85,6 @@ describe("Package Manager Utils", () => {
 
     test("should skip if no dependencies in package.json", async () => {
       const testPath = path.join("/test", "path");
-      const packageJsonPath = path.join(testPath, "package.json");
 
       fs.pathExists.mockResolvedValue(true);
       fs.readJson.mockResolvedValue({ name: "test" });

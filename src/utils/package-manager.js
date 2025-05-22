@@ -16,7 +16,7 @@ function commandExists(cmd) {
     const whichCmd = isWin ? "where" : "which";
     execSync(`${whichCmd} ${cmd}`, { stdio: "ignore" });
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 }

@@ -48,7 +48,7 @@ function getRepoNameFromUrl(gitUrl) {
     let url;
     try {
       url = new URL(gitUrl);
-    } catch (e) {
+    } catch {
       // Handle SSH URLs (git@github.com:user/repo.git)
       if (gitUrl.includes("@") && gitUrl.includes(":")) {
         const match = gitUrl.match(/:([^/]+\/[^/]+?)(?:\.git)?$/);

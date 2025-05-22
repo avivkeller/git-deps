@@ -101,7 +101,7 @@ describe("List Command", () => {
   });
 
   test("should properly construct node_modules path for scoped packages", async () => {
-    fs.pathExists = jest.fn().mockImplementation((p) => true);
+    fs.pathExists = jest.fn().mockImplementation(() => true);
     fs.readJson = jest.fn().mockResolvedValue({
       name: "@scope/pkg",
       version: "2.0.0",

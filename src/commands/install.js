@@ -82,7 +82,7 @@ async function install(depArg, options = {}) {
     const groupedDeps = groupDependenciesByRepo(depsToInstall);
 
     // Process each repository group
-    for (const [repoKey, deps] of Object.entries(groupedDeps)) {
+    for (const deps of Object.values(groupedDeps)) {
       const { url, ref } = deps[0].parsed;
 
       logger.info(`Processing repository: ${url}#${ref}`);
